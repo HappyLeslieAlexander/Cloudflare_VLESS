@@ -12,7 +12,7 @@
 
 用V2RayN生成一个UUID，替换第八行的UUID，保存
 
-绑定你自己的Cloudflare的域名，必须解析到cloudflare的名称服务器并添加至Cloudflare（可跳过）
+绑定你自己的Cloudflare的域名，必须解析到Cloudflare的名称服务器并添加至Cloudflare（可跳过）
 
 进入你的Worker或Pages的web页面（NAME.USERNAME.workers.dev），在web页面的地址后加上你的UUID（NAME.USERNAME.workers.dev/UUID）
 
