@@ -746,13 +746,13 @@ async function handleUDPOutBound(webSocket, vlessResponseHeader, log) {
  * @returns {string}
  */
 function getVLESSConfig(userID, hostName) {
-    const vlessLink = `vless://${userID}\u0040www.gov.se:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Misaka-workers`
-    const vlessTlsLink = `vless://${userID}\u0040www.gov.se:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Misaka-workers-TLS`
+    const vlessLink = `vless://${userID}\u0040www.visa.com:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-workers`
+    const vlessTlsLink = `vless://${userID}\u0040www.visa.com:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-workers-TLS`
     return `
-下面是非 TLS 端口的节点信息及分享链接，可使用 CF 支持的非 TLS 端口：
+下面是非 TLS 端口的节点信息及分享链接，可使用 Cloudflare 支持的非 TLS 端口：
 
-地址：${hostName} 或 CF 优选 IP
-端口：80 或 CF 支持的非 TLS 端口
+地址：${hostName} 或 Cloudflare 优选 IP
+端口：80 或 Cloudflare 支持的非 TLS 端口
 UUID：${userID}
 传输：ws
 伪装域名：${hostName}
@@ -760,10 +760,10 @@ UUID：${userID}
 
 ${vlessLink}
 
-下面是 TLS 端口的节点信息及分享链接，可使用 CF 支持的 TLS 端口：
+下面是 TLS 端口的节点信息及分享链接，可使用 Cloudflare 支持的 TLS 端口：
 
-地址：${hostName} 或 CF 优选 IP
-端口：443 或 CF 支持的 TLS 端口
+地址：${hostName} 或 Cloudflare 优选 IP
+端口：443 或 Cloudflare 支持的 TLS 端口
 UUID：${userID}
 传输：ws
 传输层安全：TLS
@@ -773,9 +773,8 @@ SNI 域名：${hostName}
 
 ${vlessTlsLink}
 
-提示：部分地区有 CF 默认域名被污染的情况，除非打开客户端的 TLS 分片功能，否则无法使用 TLS 端口的节点
+提示：部分地区有 Cloudflare 默认域名被污染的情况，除非打开客户端的 TLS 分片功能，否则无法使用 TLS 端口的节点
 如为 Pages 部署的节点则只能使用 TLS 端口的节点
 ---------------------------------------------------------------
-更多教程，请关注：小御坂的破站
 `;
 }
