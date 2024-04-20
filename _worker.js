@@ -1,10 +1,12 @@
+// <!--GAMFC-->version base on commit 43fad05dcdae3b723c53c226f8181fc5bd47223e, time is 2023-06-22 15:20:02 UTC<!--GAMFC-END-->.
+// @ts-ignore
 import { connect } from 'cloudflare:sockets';
 
 // How to generate your own UUID:
 // [Windows] Press "Win + R", input cmd and run:  Powershell -NoExit -Command "[guid]::NewGuid()"
-let userID = '1ccd96f7-8f16-475b-936a-8768202887b9';
+let userID = '8820e16b-fbc2-49d3-90e4-eeeb8301c83c';
 
-const proxyIPs = ['cdn-all.xn--b6gac.eu.org', 'cdn.xn--b6gac.eu.org', 'cdn-b100.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org', 'cdn.anycast.eu.org'];
+const proxyIPs = ["workers.cloudflare.cyou"]; // const proxyIPs = ['cdn-all.xn--b6gac.eu.org', 'cdn.xn--b6gac.eu.org', 'cdn-b100.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org', 'cdn.anycast.eu.org'];
 let proxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
 
 let dohURL = 'https://sky.rethinkdns.com/1:-Pf_____9_8A_AMAIgE8kMABVDDmKOHTAKg='; // https://cloudflare-dns.com/dns-query or https://dns.google/dns-query
@@ -29,7 +31,7 @@ export default {
      */
     async fetch(request, env, ctx) {
         try {
-            userID = env.UUID || userID;
+            userID = userID || env.UUID;
             proxyIP = env.PROXYIP || proxyIP;
             dohURL = env.DNS_RESOLVER_URL || dohURL;
             nodeId = env.NODE_ID || nodeId;
@@ -744,8 +746,8 @@ async function handleUDPOutBound(webSocket, vlessResponseHeader, log) {
  * @returns {string}
  */
 function getVLESSConfig(userID, hostName) {
-    const vlessLink = `vless://${userID}@${hostName}:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2048#${hostName}`
-    const vlessTlsLink = `vless://${userID}@${hostName}:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2048#${hostName}`
+    const vlessLink = `vless://${userID}\u0040www.gov.se:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Misaka-workers`
+    const vlessTlsLink = `vless://${userID}\u0040www.gov.se:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Misaka-workers-TLS`
     return `
 下面是非 TLS 端口的节点信息及分享链接，可使用 CF 支持的非 TLS 端口：
 
@@ -754,7 +756,7 @@ function getVLESSConfig(userID, hostName) {
 UUID：${userID}
 传输：ws
 伪装域名：${hostName}
-路径：/?ed=2048
+路径：/?ed=2560
 
 ${vlessLink}
 
@@ -766,12 +768,14 @@ UUID：${userID}
 传输：ws
 传输层安全：TLS
 伪装域名：${hostName}
-路径：/?ed=2048
+路径：/?ed=2560
 SNI 域名：${hostName}
 
 ${vlessTlsLink}
 
-提示：如使用 workers.dev 域名，则无法使用非TLS 端口
+提示：部分地区有 CF 默认域名被污染的情况，除非打开客户端的 TLS 分片功能，否则无法使用 TLS 端口的节点
+如为 Pages 部署的节点则只能使用 TLS 端口的节点
 ---------------------------------------------------------------
+更多教程，请关注：小御坂的破站
 `;
 }
