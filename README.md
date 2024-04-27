@@ -4,6 +4,10 @@
 
 ## 部署教程
 
+Workers 教程地址：https://blog.misaka.rest/2023/07/29/cf-wkrs-vless/
+
+Pages 教程地址：https://blog.misaka.rest/2023/07/29/cf-pages-vless/
+
 进入Cloudflare官网，注册一个新账户（如果你有请跳过）
 
 进入Workers & Pages，创建一个新Worker或Pages
@@ -29,3 +33,28 @@
 ## 鸣谢
 
 项目大部分代码来自 https://github.com/Misaka-blog/cf-wkrs-pages-vless/tree/main 为了避免原作者删库跑路Clone了此仓库
+
+鸣谢项目
+zizifn：https://github.com/zizifn/edgetunnel
+3Kmfi6HP：https://github.com/3Kmfi6HP/EDtunnel
+cmliu：https://github.com/cmliu/edgetunnel
+
+### 捐赠
+
+加密货币
+
+TRC20
+
+TY7n1xwiHCBqcQqGH1cxjTQqZTuTXbzB4S
+
+ERC20
+
+0xed57E7237E88ceC19d3Fd12A0D26bACb1DCc247b
+
+TON
+
+UQC4r4gxAIbOTEEZGG-C1Ffn9inRo24J7qw3U0dFfaIfKyFr
+
+## 注意事项
+
+由于 Workers 节点的 IP 变动频繁，因此请勿在此节点登录重要账号
