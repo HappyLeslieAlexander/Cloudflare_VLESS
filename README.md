@@ -14,8 +14,15 @@
 
 绑定你自己的Cloudflare的域名，必须解析到Cloudflare的名称服务器并添加至Cloudflare（可跳过）
 
-进入你的Worker或Pages的web页面（NAME.USERNAME.workers.dev），在web页面的地址后加上你的UUID（NAME.USERNAME.workers.dev/UUID）
+访问 https://DOMAIN.workers.dev/UUID ，即可查看节点明文配置信息
+访问 https://DOMAIN.workers.dev/UUID/base64 ，即可使用 Base64 通用客户端订阅
+访问 https://DOMAIN.workers.dev/UUID/clash ，即可使用 Clash 节点订阅
+访问 https://DOMAIN.workers.dev/UUID/sb ，即可使用 Sing-box 节点订阅
 
 拷贝节点订阅，如果没有域名，使用worker.dev需要搭配IP优选（因为worker.dev域名被墙了，非TLS也可优选），且不可用非TLS端口（因为worker.dev域名默认使用https）
 
 将节点订阅导入V2RayN或V2RayNG，即可使用，或搭配Cloudflare的IP优选使用，替换原本的地址（其他的不要动）
+
+## 鸣谢
+
+项目大部分代码来自 https://github.com/Misaka-blog/cf-wkrs-pages-vless/tree/main 为了避免原作者删库跑路Clone了此仓库
