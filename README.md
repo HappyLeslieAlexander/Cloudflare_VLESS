@@ -8,7 +8,7 @@ Workers 教程地址：https://blog.misaka.rest/2023/07/29/cf-wkrs-vless/
 
 Pages 教程地址：https://blog.misaka.rest/2023/07/29/cf-pages-vless/
 
-进入Cloudflare官网，注册一个新账户（如果你有请跳过）
+进入Cloudflare官网
 
 进入Workers & Pages，创建一个新Worker或Pages
 
@@ -16,7 +16,6 @@ Pages 教程地址：https://blog.misaka.rest/2023/07/29/cf-pages-vless/
 
 用V2RayN生成一个UUID，替换第八行的UUID，保存
 
-绑定你自己的Cloudflare的域名，必须解析到Cloudflare的名称服务器并添加至Cloudflare（可跳过）
 
 访问 https://DOMAIN.workers.dev/UUID ，即可查看节点明文配置信息
 
@@ -26,9 +25,9 @@ Pages 教程地址：https://blog.misaka.rest/2023/07/29/cf-pages-vless/
 
 访问 https://DOMAIN.workers.dev/UUID/sb ，即可使用 Sing-box 节点订阅
 
-拷贝节点订阅，如果没有域名，需要搭配IP优选（因为worker.dev域名被墙了，非TLS也可优选），且不可用非TLS端口（因为worker.dev域名默认使用https）
-
 将节点订阅导入V2RayN或V2RayNG，即可使用，或搭配Cloudflare的IP优选使用，替换原本的地址（其他的不要动）
+
+默认域名为 www.gov.se ，可以替换成任意套了Cloudflare CDN的域名（如www.visa.com speed.cloudflare.com leslieblog.top），也可以搭配IP优选将地址改为Cloudflare EndPoint 边缘IP
 
 ## 鸣谢
 
