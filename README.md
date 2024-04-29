@@ -61,3 +61,12 @@ UQC4r4gxAIbOTEEZGG-C1Ffn9inRo24J7qw3U0dFfaIfKyFr
 ## 遇到问题？
 
 有问题请看 [Issues&Solutions](https://github.com/HappyLeslieAlexander/Cloudflare_VLESS/blob/main/Issues%26Solutions.md) ，看看是否已有解决方案，如无请开Issue，欢迎提交Pull Request
+
+## 联系
+Telegram: https://t.me/Depressed_LeslieAlexander/
+
+E-mail: https://github.com/HappyLeslieAlexander/
+
+项目地址: https://github.com/HappyLeslieAlexander/Cloudflare_VLESS/
+
+By Leslie Alexander
