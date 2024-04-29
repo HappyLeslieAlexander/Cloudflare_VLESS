@@ -809,6 +809,20 @@ Sing-box 配置文件订阅链接：https://${hostName}/${userID}/sb
 提示：部分地区有 Cloudflare 默认域名被污染的情况，除非打开客户端的 TLS 分片功能，否则无法使用 TLS 端口的节点
 如为 Pages 部署的节点则只能使用 TLS 端口的节点
 ---------------------------------------------------------------
+捐赠
+加密货币
+TRC20
+TY7n1xwiHCBqcQqGH1cxjTQqZTuTXbzB4S
+ERC20
+0xed57E7237E88ceC19d3Fd12A0D26bACb1DCc247b
+TON
+UQC4r4gxAIbOTEEZGG-C1Ffn9inRo24J7qw3U0dFfaIfKyFr
+---------------------------------------------------------------
+联系
+Telegram: https://t.me/Depressed_LeslieAlexander/
+E-mail: https://github.com/HappyLeslieAlexander/
+项目地址: https://github.com/HappyLeslieAlexander/Cloudflare_VLESS/
+By Leslie Alexander
 `;
 }
 
