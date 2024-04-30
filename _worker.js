@@ -4,10 +4,10 @@ import { connect } from 'cloudflare:sockets';
 // 建议修改为自己的 UUID
 let userID = '8820e16b-fbc2-49d3-90e4-eeeb8301c83c';
 
-// 生成配置文件的 CF 优选 IP (www.gov.se   www.visa.com   speed.cloudflare.com)
+// 生成配置文件的 Cloudflare 优选 IP (www.gov.se   www.visa.com   speed.cloudflare.com)
 const bestCFIP = "www.gov.se"
 
-// 用于 CF 网站的代理 IP
+// 用于 Cloudflare 网站的代理 IP
 const proxyIPs = ["workers.cloudflare.cyou"]; // const proxyIPs = ['cdn-all.xn--b6gac.eu.org', 'cdn.xn--b6gac.eu.org', 'cdn-b100.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org', 'cdn.anycast.eu.org'];
 let proxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
 
@@ -50,7 +50,7 @@ export default {
                                 "Content-Type": "application/json;charset=utf-8",
                             },
                         });
-                    case '/connect': // for test connect to cf socket
+                    case '/connect': // for test connect to Cloudflare socket
                         const [hostname, port] = ['cloudflare.com', '80'];
                         console.log(`Connecting to ${hostname}:${port}...`);
 
@@ -204,7 +204,7 @@ async function vlessOverWSHandler(request) {
                 } `;
             if (hasError) {
                 // controller.error(message);
-                throw new Error(message); // cf seems has bug, controller.error will not end stream
+                throw new Error(message); // Cloudflare seems has bug, controller.error will not end stream
                 // webSocket.close(1000, message);
                 return;
             }
@@ -214,7 +214,7 @@ async function vlessOverWSHandler(request) {
                     isDns = true;
                 } else {
                     // controller.error('UDP proxy only enable for DNS which is port 53');
-                    throw new Error('UDP proxy only enable for DNS which is port 53'); // cf seems has bug, controller.error will not end stream
+                    throw new Error('UDP proxy only enable for DNS which is port 53'); // Cloudflare seems has bug, controller.error will not end stream
                     return;
                 }
             }
@@ -222,7 +222,7 @@ async function vlessOverWSHandler(request) {
             const vlessResponseHeader = new Uint8Array([vlessVersion[0], 0]);
             const rawClientData = chunk.slice(rawDataIndex);
 
-            // TODO: support udp here when cf runtime has udp support
+            // TODO: support udp here when Cloudflare runtime has udp support
             if (isDns) {
                 const { write } = await handleUDPOutBound(webSocket, vlessResponseHeader, log);
                 udpStreamWrite = write;
@@ -350,7 +350,7 @@ async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawCli
         return tcpSocket;
     }
 
-    // if the cf connect tcp socket have no incoming data, we retry to redirect ip
+    // if the Cloudflare connect tcp socket have no incoming data, we retry to redirect ip
     async function retry() {
         const tcpSocket = await connectAndWrite(proxyIP || addressRemote, portRemote)
         // no matter retry success or not, close websocket
@@ -601,9 +601,9 @@ async function remoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, re
                         webSocket.send(await new Blob([vlessHeader, chunk]).arrayBuffer());
                         vlessHeader = null;
                     } else {
-                        // seems no need rate limit this, CF seems fix this??..
+                        // seems no need rate limit this, Cloudflare seems fix this??..
                         // if (remoteChunkCount > 20000) {
-                        // 	// cf one package is 4096 byte(4kb),  4096 * 20000 = 80M
+                        // 	// Cloudflare one package is 4096 byte(4kb),  4096 * 20000 = 80M
                         // 	await delay(1);
                         // }
                         webSocket.send(chunk);
@@ -626,7 +626,7 @@ async function remoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, re
             safeCloseWebSocket(webSocket);
         });
 
-    // seems is cf connect socket have error,
+    // seems is Cloudflare connect socket have error,
     // 1. Socket.closed will have error
     // 2. Socket.readable will be close without any data coming
     if (hasIncomingData === false && retry) {
@@ -827,7 +827,7 @@ By Leslie Alexander
 }
 
 function getBase64Config(userID, hostName) {
-    const vlessLinks = btoa(`vless://${userID}\u0040${bestCFIP}:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-80\nvless://${userID}\u0040${bestCFIP}:8080?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-8080\nvless://${userID}\u0040${bestCFIP}:8880?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-8880\nvless://${userID}\u0040${bestCFIP}:2052?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-2052\nvless://${userID}\u0040${bestCFIP}:2082?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-2082\nvless://${userID}\u0040${bestCFIP}:2086?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-2086\nvless://${userID}\u0040${bestCFIP}:2095?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-2095\nvless://${userID}\u0040${bestCFIP}:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-443\nvless://${userID}\u0040${bestCFIP}:2053?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-2053\nvless://${userID}\u0040${bestCFIP}:2083?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-2083\nvless://${userID}\u0040${bestCFIP}:2087?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-2087\nvless://${userID}\u0040${bestCFIP}:2096?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-2096\nvless://${userID}\u0040${bestCFIP}:8443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-TLS-8443`);
+    const vlessLinks = btoa(`vless://${userID}\u0040${bestCFIP}:80?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-80\nvless://${userID}\u0040${bestCFIP}:8080?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-cf-vless-8080\nvless://${userID}\u0040${bestCFIP}:8880?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-8880\nvless://${userID}\u0040${bestCFIP}:2052?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-2052\nvless://${userID}\u0040${bestCFIP}:2082?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-2082\nvless://${userID}\u0040${bestCFIP}:2086?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-2086\nvless://${userID}\u0040${bestCFIP}:2095?encryption=none&security=none&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-2095\nvless://${userID}\u0040${bestCFIP}:443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-443\nvless://${userID}\u0040${bestCFIP}:2053?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-2053\nvless://${userID}\u0040${bestCFIP}:2083?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-2083\nvless://${userID}\u0040${bestCFIP}:2087?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-2087\nvless://${userID}\u0040${bestCFIP}:2096?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-2096\nvless://${userID}\u0040${bestCFIP}:8443?encryption=none&security=tls&sni=${hostName}&fp=randomized&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#Leslie-Cloudflare-vless-TLS-8443`);
 
     return `${vlessLinks}`
 }
@@ -862,7 +862,7 @@ dns:
       - 240.0.0.0/4
 
 proxies:
-- name: cf-vless-80
+- name: Cloudflare-vless-80
   type: vless
   server: ${bestCFIP}
   port: 80
@@ -875,7 +875,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-8080
+- name: Cloudflare-vless-8080
   type: vless
   server: ${bestCFIP}
   port: 8080
@@ -888,7 +888,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-8880
+- name: Cloudflare-vless-8880
   type: vless
   server: ${bestCFIP}
   port: 8880
@@ -901,7 +901,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-2052
+- name: Cloudflare-vless-2052
   type: vless
   server: ${bestCFIP}
   port: 2052
@@ -914,7 +914,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-2082
+- name: Cloudflare-vless-2082
   type: vless
   server: ${bestCFIP}
   port: 2082
@@ -927,7 +927,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-2086
+- name: Cloudflare-vless-2086
   type: vless
   server: ${bestCFIP}
   port: 2086
@@ -940,7 +940,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-2095
+- name: Cloudflare-vless-2095
   type: vless
   server: ${bestCFIP}
   port: 2095
@@ -954,7 +954,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-443
+- name: Cloudflare-vless-tls-443
   type: vless
   server: ${bestCFIP}
   port: 443
@@ -968,7 +968,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-2053
+- name: Cloudflare-vless-tls-2053
   type: vless
   server: ${bestCFIP}
   port: 2053
@@ -982,7 +982,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-2083
+- name: Cloudflare-vless-tls-2083
   type: vless
   server: ${bestCFIP}
   port: 2083
@@ -996,7 +996,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-2087
+- name: Cloudflare-vless-tls-2087
   type: vless
   server: ${bestCFIP}
   port: 2087
@@ -1010,7 +1010,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-2096
+- name: Cloudflare-vless-tls-2096
   type: vless
   server: ${bestCFIP}
   port: 2096
@@ -1024,7 +1024,7 @@ proxies:
     headers:
       Host: ${hostName}
 
-- name: cf-vless-tls-8443
+- name: Cloudflare-vless-tls-8443
   type: vless
   server: ${bestCFIP}
   port: 8443
@@ -1044,19 +1044,19 @@ proxy-groups:
   url: http://www.gstatic.com/generate_204
   interval: 300
   proxies:
-    - cf-vless-80
-    - cf-vless-8080
-    - cf-vless-8880
-    - cf-vless-2052
-    - cf-vless-2082
-    - cf-vless-2086
-    - cf-vless-2095
-    - cf-vless-tls-443
-    - cf-vless-tls-2053
-    - cf-vless-tls-2083
-    - cf-vless-tls-2087
-    - cf-vless-tls-2096
-    - cf-vless-tls-8443
+    - Cloudflare-vless-80
+    - Cloudflare-vless-8080
+    - Cloudflare-vless-8880
+    - Cloudflare-vless-2052
+    - Cloudflare-vless-2082
+    - Cloudflare-vless-2086
+    - Cloudflare-vless-2095
+    - Cloudflare-vless-tls-443
+    - Cloudflare-vless-tls-2053
+    - Cloudflare-vless-tls-2083
+    - Cloudflare-vless-tls-2087
+    - Cloudflare-vless-tls-2096
+    - Cloudflare-vless-tls-8443
 
 - name: 自动选择
   type: url-test
@@ -1064,19 +1064,19 @@ proxy-groups:
   interval: 300
   tolerance: 50
   proxies:
-    - cf-vless-80
-    - cf-vless-8080
-    - cf-vless-8880
-    - cf-vless-2052
-    - cf-vless-2082
-    - cf-vless-2086
-    - cf-vless-2095
-    - cf-vless-tls-443
-    - cf-vless-tls-2053
-    - cf-vless-tls-2083
-    - cf-vless-tls-2087
-    - cf-vless-tls-2096
-    - cf-vless-tls-8443
+    - Cloudflare-vless-80
+    - Cloudflare-vless-8080
+    - Cloudflare-vless-8880
+    - Cloudflare-vless-2052
+    - Cloudflare-vless-2082
+    - Cloudflare-vless-2086
+    - Cloudflare-vless-2095
+    - Cloudflare-vless-tls-443
+    - Cloudflare-vless-tls-2053
+    - Cloudflare-vless-tls-2083
+    - Cloudflare-vless-tls-2087
+    - Cloudflare-vless-tls-2096
+    - Cloudflare-vless-tls-8443
     
 - name: 🌍选择代理
   type: select
@@ -1084,19 +1084,19 @@ proxy-groups:
     - 负载均衡
     - 自动选择
     - DIRECT
-    - cf-vless-80
-    - cf-vless-8080
-    - cf-vless-8880
-    - cf-vless-2052
-    - cf-vless-2082
-    - cf-vless-2086
-    - cf-vless-2095
-    - cf-vless-tls-443
-    - cf-vless-tls-2053
-    - cf-vless-tls-2083
-    - cf-vless-tls-2087
-    - cf-vless-tls-2096
-    - cf-vless-tls-8443
+    - Cloudflare-vless-80
+    - Cloudflare-vless-8080
+    - Cloudflare-vless-8880
+    - Cloudflare-vless-2052
+    - Cloudflare-vless-2082
+    - Cloudflare-vless-2086
+    - Cloudflare-vless-2095
+    - Cloudflare-vless-tls-443
+    - Cloudflare-vless-tls-2053
+    - Cloudflare-vless-tls-2083
+    - Cloudflare-vless-tls-2087
+    - Cloudflare-vless-tls-2096
+    - Cloudflare-vless-tls-8443
 
 rules:
   - GEOIP,LAN,DIRECT
@@ -1205,25 +1205,25 @@ function getSingConfig(userID, hostName) {
       "default": "auto",
       "outbounds": [
         "auto",
-        "cf-vless-80",
-        "cf-vless-8080",
-        "cf-vless-8880",
-        "cf-vless-2052",
-        "cf-vless-2082",
-        "cf-vless-2086",
-        "cf-vless-2095",
-        "cf-vless-tls-443",
-        "cf-vless-tls-2053",
-        "cf-vless-tls-2083",
-        "cf-vless-tls-2087",
-        "cf-vless-tls-2096",
-        "cf-vless-tls-8443"
+        "Cloudflare-vless-80",
+        "Cloudflare-vless-8080",
+        "Cloudflare-vless-8880",
+        "Cloudflare-vless-2052",
+        "Cloudflare-vless-2082",
+        "Cloudflare-vless-2086",
+        "Cloudflare-vless-2095",
+        "Cloudflare-vless-tls-443",
+        "Cloudflare-vless-tls-2053",
+        "Cloudflare-vless-tls-2083",
+        "Cloudflare-vless-tls-2087",
+        "Cloudflare-vless-tls-2096",
+        "Cloudflare-vless-tls-8443"
       ]
     },
     {
       "server": "${bestCFIP}",
       "server_port": 80,
-      "tag": "cf-vless-80",
+      "tag": "Cloudflare-vless-80",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1240,7 +1240,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 8080,
-      "tag": "cf-vless-8080",
+      "tag": "Cloudflare-vless-8080",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1257,7 +1257,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 8880,
-      "tag": "cf-vless-8880",
+      "tag": "Cloudflare-vless-8880",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1274,7 +1274,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2052,
-      "tag": "cf-vless-2052",
+      "tag": "Cloudflare-vless-2052",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1291,7 +1291,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2082,
-      "tag": "cf-vless-2082",
+      "tag": "Cloudflare-vless-2082",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1308,7 +1308,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2086,
-      "tag": "cf-vless-2086",
+      "tag": "Cloudflare-vless-2086",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1325,7 +1325,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2095,
-      "tag": "cf-vless-2095",
+      "tag": "Cloudflare-vless-2095",
       "packet_encoding": "packetaddr",
       "transport": {
         "headers": {
@@ -1342,7 +1342,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 443,
-      "tag": "cf-vless-tls-443",
+      "tag": "Cloudflare-vless-tls-443",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1368,7 +1368,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2053,
-      "tag": "cf-vless-tls-2053",
+      "tag": "Cloudflare-vless-tls-2053",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1394,7 +1394,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2083,
-      "tag": "cf-vless-tls-2083",
+      "tag": "Cloudflare-vless-tls-2083",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1420,7 +1420,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2087,
-      "tag": "cf-vless-tls-2087",
+      "tag": "Cloudflare-vless-tls-2087",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1446,7 +1446,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 2096,
-      "tag": "cf-vless-tls-2096",
+      "tag": "Cloudflare-vless-tls-2096",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1472,7 +1472,7 @@ function getSingConfig(userID, hostName) {
     {
       "server": "${bestCFIP}",
       "server_port": 8443,
-      "tag": "cf-vless-tls-8443",
+      "tag": "Cloudflare-vless-tls-8443",
       "tls": {
         "enabled": true,
         "server_name": "${hostName}",
@@ -1511,19 +1511,19 @@ function getSingConfig(userID, hostName) {
       "tag": "auto",
       "type": "urltest",
       "outbounds": [
-        "cf-vless-80",
-        "cf-vless-8080",
-        "cf-vless-8880",
-        "cf-vless-2052",
-        "cf-vless-2082",
-        "cf-vless-2086",
-        "cf-vless-2095",
-        "cf-vless-tls-443",
-        "cf-vless-tls-2053",
-        "cf-vless-tls-2083",
-        "cf-vless-tls-2087",
-        "cf-vless-tls-2096",
-        "cf-vless-tls-8443"
+        "Cloudflare-vless-80",
+        "Cloudflare-vless-8080",
+        "Cloudflare-vless-8880",
+        "Cloudflare-vless-2052",
+        "Cloudflare-vless-2082",
+        "Cloudflare-vless-2086",
+        "Cloudflare-vless-2095",
+        "Cloudflare-vless-tls-443",
+        "Cloudflare-vless-tls-2053",
+        "Cloudflare-vless-tls-2083",
+        "Cloudflare-vless-tls-2087",
+        "Cloudflare-vless-tls-2096",
+        "Cloudflare-vless-tls-8443"
       ],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "1m",
