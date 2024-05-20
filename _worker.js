@@ -2,7 +2,7 @@
 import { connect } from 'cloudflare:sockets';
 
 // 建议修改为自己的 UUID
-let userID = '8820e16b-fbc2-49d3-90e4-eeeb8301c83c';
+let userID = '5bcaa1ac-83c2-4a26-8f38-88763e963a73';
 
 // 生成配置文件的 Cloudflare 优选 IP (www.gov.se   www.visa.com   speed.cloudflare.com)
 const bestCFIP = "www.gov.se"
