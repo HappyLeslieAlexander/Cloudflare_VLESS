@@ -2,10 +2,10 @@
 import { connect } from 'cloudflare:sockets';
 
 // 建议修改为自己的 UUID
-let userID = '8820e16b-fbc2-49d3-90e4-eeeb8301c83c';
+let userID = '5bcaa1ac-83c2-4a26-8f38-88763e963a73';
 
 // 生成配置文件的 Cloudflare 优选 IP (www.gov.se   www.visa.com   speed.cloudflare.com)
-const bestCFIP = "www.gov.se"
+const bestCFIP = "35.219.50.99"
 
 // 用于 Cloudflare 网站的代理 IP
 const proxyIPs = ["workers.cloudflare.cyou"]; // const proxyIPs = ['cdn-all.xn--b6gac.eu.org', 'cdn.xn--b6gac.eu.org', 'cdn-b100.xn--b6gac.eu.org', 'edgetunnel.anycast.eu.org', 'cdn.anycast.eu.org'];
