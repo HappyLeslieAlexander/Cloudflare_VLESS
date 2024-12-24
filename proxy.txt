@@ -1,10 +1,6 @@
-workers.cloudflare.cyou（已报废）
-cdn-seek-b090-2a5cee4bb04a.hk-cctv.com
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org
-edgetunnel.anycast.eu.org
-cdn.anycast.eu.org
 bestproxy.onecf.eu.org
 ipdb.rr.nu
 
